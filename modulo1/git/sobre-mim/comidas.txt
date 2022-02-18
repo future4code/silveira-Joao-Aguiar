@@ -1,0 +1,12 @@
+COMIDAS:
+
+1-  Strogonnof
+2-  Bife de boi
+3-  Batata frita
+4-  Pipoca
+5-  Doce de leite
+6-  Brigadeiro
+7-  Amendoim
+8-  Hambúrguer
+9-  Cookie
+10- Cachorro quente
