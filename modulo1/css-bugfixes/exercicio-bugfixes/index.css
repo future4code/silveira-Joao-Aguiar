@@ -104,6 +104,11 @@ table {
     width: 60%;
 }
 
+tr{
+    position: relative;
+    left: 60px;
+}
+
 td button {
     background-color: #fadf63;
     width: 150px;
