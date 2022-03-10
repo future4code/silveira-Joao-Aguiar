@@ -17,6 +17,11 @@ h2 {
 }
 
 input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid 2px;
+    
     height: 20px;
     width: 500px;
 }
@@ -112,6 +117,22 @@ tr{
 
 td button {
     background-color: #fadf63;
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    color: black;
+}
+
+td button:hover{
+    background-color: #c4ac43;
+    width: 150px;
+    height: 30px;
+    border-radius: 5px;
+    color: black;
+}
+
+td button:active{
+    background-color: white;
     width: 150px;
     height: 30px;
     border-radius: 5px;
