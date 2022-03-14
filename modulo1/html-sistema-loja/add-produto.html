@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Adicionar Produto</title>
+</head>
+<body>
+    <header>
+        <div>
+            <h1 id="hAlt">SousChef</h1>
+        </div>
+    
+        <div class="nav">
+            <button><a href="index.html">Página Inicial</a></button>
+            <button><a href="ctrl-estoque.html">Controle de Estoque</a></button>
+            <button><a href="add-produto.html">Adicionar Produto</a></button>
+            <button><a href="funcionarios.html">Funcionários</a></button>
+        </div>
+    </header>
+
+    
+    <h2>Adicionar Produto</h2>
+    <form action="">
+        <div>
+            <label for="link-foto">Link para foto: </label>
+            <input type="url" id="link-foto" name="link-foto">
+        </div>
+        
+        <div>
+            <label for="descricao">Descrição do produto: </label>
+            <!-- Adicione o id apropriado para o input abaixo -->
+            <input type="text" id="descricao-produto" name="descrição">
+        </div>
+        
+        <div>
+            <label for="preco">Preço (em R$): </label>
+            <!-- Adicione o id apropriado e o type para receber números abaixo -->
+            <input type="number" id="preco" name="preço">
+        </div>
+        
+        <div>
+            <!-- Preencha as propriedades necessárias para os elementos abaixo -->
+            <label>Quantidade disponível: </label>
+            <input type="number" id="qtd" name="quantidade">
+        </div>
+
+        <div class="form-add">
+            <!-- Adicione ao type do botão abaixo o valor para que ele submeta o formulário -->
+            <button id="button" type="submit"> Adicionar </button>
+        </div>
+
+    </form>
+    <br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br>
+    <br><br>
+    <footer>
+        <p id="desc2">Siga-nos nas redes sociais!</p>
+
+        
+        <div id="imgPag1">
+            <img id="img1" src="https://image.flaticon.com/icons/png/512/25/25305.png"/>
+            <img id="img1" src="https://image.flaticon.com/icons/png/512/25/25425.png"/>
+            <img id="img1" src="https://image.flaticon.com/icons/png/512/8/8800.png"/>
+        </div>
+    </footer>
+</body>
+</html>
