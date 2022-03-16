@@ -82,3 +82,24 @@ footer{
     color: rgb(0, 0, 0);
     background-color: rgb(255, 123, 0);;
 }
+
+@media screen and (max-width: 500px) {
+
+    header h1{
+        font-size: 25px;
+        margin-left: 20px;
+    }
+
+    header input{
+        margin-right: 10px;
+        border: none;
+        height: 30px;
+    }
+
+    #main{
+        display: grid;
+        grid-gap: 15px;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(16,1fr);
+    }
+}
