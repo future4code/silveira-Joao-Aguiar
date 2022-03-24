@@ -1,3 +1,0 @@
-# Aprendizados da semana
-
-    Esta semana foi a semana **introdutória** na **Labenu**, aprendemos como funciona a escola, sobre sua diversidade, também aprendemos sobe os contratos e sobre formas mais eficientes de estudar programação. Tivemos uma aula sobre Terminal e sobre seus comandos básicos, além de uma aula de git e github. por fim aprendemos sobre a pedagogia e sistema de ensino da Labenu. Somando tudo, descobrimos que: todos esses conhecimentos serão úteis nao apenas para nossa jornada na **Labenu** mastambém em nossa jornada de trabalho quando nos formarmos.
