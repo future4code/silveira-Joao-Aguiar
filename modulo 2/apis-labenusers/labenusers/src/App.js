@@ -13,16 +13,38 @@ margin-bottom:2px;
 border-top:solid 1px;
 border-bottom:solid 1px;
 
+:hover{
+  background-color: rgb(240, 240, 240);;
+}
+
+
+div{
+  width:100%;
+}
+
 p{
   margin:0px;
+  cursor: pointer;
 }
-button{
+
+`
+const Del = styled.button`
+  cursor: pointer;
   border:none;
   background-color:transparent;
   :hover{
     background-color:red;
   }
-}
+
+`
+const Edit = styled.button`
+  cursor: pointer;
+  border:none;
+  background-color:transparent;
+  :hover{
+    background-color:aqua;
+  }
+
 `
 
 const Display = styled.div`
@@ -50,6 +72,10 @@ width: 300px;
 margin:auto;
 `
 
+const Info = styled.div`
+text-align:center;
+`
+
 
 
 class App extends React.Component {
@@ -59,7 +85,9 @@ class App extends React.Component {
     valorEmail: '',
     pesquisar: '',
     usuarios: [],
-    tela: true
+    tela: 'cadastro',
+    usuarioAtual: [],
+    editando: false
   }
 
   getUsuarios = () => {
@@ -104,9 +132,10 @@ class App extends React.Component {
     axios.post(url, body, headers)
       .then((res) => {
         this.getUsuarios()
-        this.setState({valorEmail:''})
-        this.setState({valorUser:''})
-        alert('Usuário criado!')
+        alert(`Usuário '${this.state.valorUser}' criado com sucesso!`)
+        this.setState({ valorEmail: '' })
+        this.setState({ valorUser: '' })
+
       })
       .catch((err) => {
         alert(err.response.data)
@@ -114,7 +143,12 @@ class App extends React.Component {
 
   }
 
-  deleteUsuarios = (nome,id) => {
+  editarUsuarios = (id) => {
+
+    const body = {
+      name: this.state.valorUser,
+      email: this.state.valorEmail
+    }
 
     const headers = {
       headers: {
@@ -124,20 +158,75 @@ class App extends React.Component {
 
     const url = `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${id}`
 
-      axios.delete(url, headers)
+    axios.put(url, body, headers)
       .then((res) => {
         this.getUsuarios()
-        alert(`Usuário ${nome} deletado com sucesso`)
+        alert(`Usuário '${this.state.valorUser}' editado com sucesso!`)
+        this.setState({
+          valorUser: '',
+          valorEmail: ''
+        })
       })
       .catch((err) => {
         alert(err.response.data)
       })
-    
-    }
-  
 
-  onClickTela = () => {
-    this.setState({ tela: !this.state.tela })
+  }
+
+  deleteUsuarios = (nome, id) => {
+
+    const headers = {
+      headers: {
+        Authorization: 'joao-aguiar-silveira'
+      }
+    }
+
+    const url = `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${id}`
+
+    let confirmar = window.confirm(`Tem certeza que deseja excluir o usuário: ${nome}?`)
+    if (confirmar) {
+      axios.delete(url, headers)
+        .then((res) => {
+          this.getUsuarios()
+          alert(`Usuário '${nome}' deletado com sucesso`)
+          this.setState({ tela: 'user' })
+        })
+        .catch((err) => {
+          alert(err.response.data)
+        })
+
+    }
+
+  }
+
+
+  onClickMainTela = () => {
+    this.setState({ tela: 'cadastro' })
+  }
+
+  onClickUserTela = () => {
+    this.setState({ tela: 'user' })
+  }
+
+  onClickInfoTela = (id) => {
+
+    const headers = {
+      headers: {
+        Authorization: 'joao-aguiar-silveira'
+      }
+    }
+
+    const url = `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${id}`
+
+    axios.get(url, headers)
+      .then((res) => {
+        this.setState({ usuarioAtual: res.data })
+        this.setState({ tela: 'info' })
+      })
+      .catch((err) => {
+        alert(err.response.data)
+      })
+
   }
 
   //...........configuração dos inputs............
@@ -155,44 +244,74 @@ class App extends React.Component {
     const renderizarNomes = this.state.usuarios.map((user) => {
       return (
         <ShowNames>
-          <p key={user.id}>{user.name}</p>
-          <button onClick={()=> this.deleteUsuarios(user.name,user.id)}>X</button>
+          <div onClick={() => { this.onClickInfoTela(user.id) }}>
+            <p key={user.id}>{user.name}</p>
+          </div>
+          <Del onClick={() => this.deleteUsuarios(user.name, user.id)}>X</Del>
         </ShowNames>
       )
     })
 
 
     let telaAtual;
-    if (this.state.tela) {
-      telaAtual = (
-        <Page>
-          <h1>Cadastre um usuário</h1>
-          <MainPage
-            valorUser={this.state.valorUser}
-            valorEmail={this.state.valorEmail}
-            onChangeInputUser={this.onChangeInputUser}
-            onChangeInputEmail={this.onChangeInputEmail}
-            criarUsuarios={this.criarUsuarios}
-          />
-          <button onClick={this.onClickTela}>Ver Usuários</button>
-        </Page>
-      )
-    } else {
-      return (
-        <Page>
-          <h1>Usuários</h1>
-          {renderizarNomes}
-          <Voltar onClick={this.onClickTela}>Voltar</Voltar>
-        </Page>
-      )
+    switch (this.state.tela) {
+
+      case 'cadastro':
+        return (
+          <Display>
+            <Page>
+              <h1>Cadastre um usuário</h1>
+              <MainPage
+                valorUser={this.state.valorUser}
+                valorEmail={this.state.valorEmail}
+                onChangeInputUser={this.onChangeInputUser}
+                onChangeInputEmail={this.onChangeInputEmail}
+                criarUsuarios={this.criarUsuarios}
+              />
+              <button onClick={this.onClickUserTela}>Ver Usuários</button>
+            </Page>
+          </Display>
+        )
+
+      case 'user':
+        return (
+          <Display>
+            <Page>
+              <h1>Usuários</h1>
+              {renderizarNomes}
+              <Voltar onClick={this.onClickMainTela}>Voltar</Voltar>
+            </Page>
+          </Display>
+
+        )
+
+      case 'info':
+        return (
+          <Display>
+            <Info>
+              <div>
+                <p><strong>Nome:</strong> {this.state.usuarioAtual.name}</p>
+                <p><strong>Email:</strong> {this.state.usuarioAtual.email}</p>
+                <p><strong>ID:</strong> {this.state.usuarioAtual.id}</p>
+              </div>
+              <button onClick={() => this.deleteUsuarios(this.state.usuarioAtual.name, this.state.usuarioAtual.id)}>Deletar este usuário</button>
+              <button onClick={this.onClickUserTela}>Voltar a Usuarios</button>
+            </Info>
+          </Display>
+        )
+
+      default:
+        return (
+          <Display>
+            <Page>
+              <h1>Ocorreu um erro</h1>
+            </Page>
+          </Display>
+        )
     }
 
 
-    return (
-      <Display>
-        {telaAtual}
-      </Display>
-    );
+
   }
 
 }
