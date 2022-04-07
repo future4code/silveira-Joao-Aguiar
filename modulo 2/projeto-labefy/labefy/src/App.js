@@ -7,12 +7,17 @@ const MainDiv = styled.div`
 
 `
 
+const Info = styled.div`
+
+`
+
 class App extends React.Component {
 
   state = {
     valorNomePlaylist:'',
     pagAtual: 'mainPage',
-    allPlaylists: []
+    allPlaylists: [],
+    playlistAtual:[]
   }
 
   //..........................................................................
@@ -80,10 +85,31 @@ class App extends React.Component {
     })
   }
 
+  infoPlaylist = (id)=> {
+
+    const headers = {
+      headers: {
+        Authorization: "joao-aguiar-silveira"
+      }
+    }
+
+    const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${id}/tracks`
+
+    axios.get(url,headers)
+    .then((res)=>{
+      this.setState({playlistAtual: res.data.result.tracks})
+      console.log(this.state.playlistAtual)
+    }).catch((err)=>{
+      console.log(err.data)
+    })
+    
+    this.setState({pagAtual: 'infoPlaylist'})
+  }
+
 
   //..........................................................................
 
-  novaPlaylist = ()=> {
+  playlists = ()=> {
     this.setState({pagAtual: 'playlists'})
   }
 
@@ -102,8 +128,10 @@ class App extends React.Component {
     const playlists = this.state.allPlaylists.map((playlist)=>{
       return (
         <div>
-          <p>{playlist.name}</p>
-          <button onClick={()=> {this.deletarPlaylists(playlist.id)}}>X</button>
+          <Info onClick={()=>{this.infoPlaylist(playlist.id,playlist.name)}}>
+            <p>{playlist.name}</p>
+          </Info>        
+          <button onClick={()=> {this.deletarPlaylists(playlist.id)}} >X</button>
         </div>
       ) 
     })
@@ -114,7 +142,7 @@ class App extends React.Component {
       case 'mainPage':
         return (
           <MainDiv>
-            <button onClick={this.novaPlaylist}>
+            <button onClick={this.playlists}>
               criar nova playlist
             </button>
           </MainDiv>    
@@ -134,8 +162,11 @@ class App extends React.Component {
         case 'infoPlaylist':
         return (
           <MainDiv>
-            <button onClick={this.novaPlaylist}>
-              criar nova playlist
+            <div>
+              
+            </div>
+            <button onClick={this.playlists}>
+              voltar
             </button>
           </MainDiv>    
         )
