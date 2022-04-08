@@ -2,28 +2,44 @@ import React from "react";
 import styled from 'styled-components';
 import axios from 'axios';
 import AddPlaylist from "./component/AddPlaylist/AddPlaylist";
+import InfoPlaylist from "./component/InfoPlaylist/InfoPlaylist";
+
 
 const MainDiv = styled.div`
-
+  a{
+    display:block;
+  }
 `
 
 const Info = styled.div`
+cursor:pointer;
+`
 
+const ContainerPlaylist = styled.div`
+display:flex;
+align-items: center;
+
+:hover{
+  background-color: rgba(197, 197, 197);
+}
 `
 
 class App extends React.Component {
 
   state = {
-    valorNomePlaylist:'',
+    valorNomePlaylist: '',
     pagAtual: 'mainPage',
     allPlaylists: [],
-    playlistAtual:[]
+    playlistAtual: [],
+    nomePlaylistAtual:'',
+    idPlaylistAtual:'',
+    add: false
   }
 
   //..........................................................................
 
-  pegarPlaylists = ()=> {
-    
+  pegarPlaylists = () => {
+
     const headers = {
       headers: {
         Authorization: "joao-aguiar-silveira"
@@ -32,20 +48,20 @@ class App extends React.Component {
 
     const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists'
 
-    axios.get(url,headers)
-    .then((res)=>{
-      this.setState({allPlaylists: res.data.result.list})
-      console.log(this.state.allPlaylists)
-    }).catch((err)=>{
-      console.log(err.data)
-    })
+    axios.get(url, headers)
+      .then((res) => {
+        this.setState({ allPlaylists: res.data.result.list })
+        console.log(this.state.allPlaylists)
+      }).catch((err) => {
+        console.log(err.data)
+      })
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.pegarPlaylists()
   }
 
-  criarPlaylist = ()=> {
+  criarPlaylist = () => {
     const body = {
       name: this.state.valorNomePlaylist
     }
@@ -58,16 +74,17 @@ class App extends React.Component {
 
     const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists'
 
-    axios.post(url,body,headers)
-    .then((res)=>{
-      this.pegarPlaylists()
-      console.log(`playlist '${this.state.valorNomePlaylist}' criada com sucesso!`)
-    }).catch((err)=>{
-      console.log(err.data)
-    })
+    axios.post(url, body, headers)
+      .then((res) => {
+        this.pegarPlaylists()
+        console.log(`playlist '${this.state.valorNomePlaylist}' criada com sucesso!`)
+        this.setState({valorNomePlaylist:''})
+      }).catch((err) => {
+        console.log(err)
+      })
   }
 
-  deletarPlaylists = (id)=> {
+  deletarPlaylists = (id,nome) => {
     const headers = {
       headers: {
         Authorization: "joao-aguiar-silveira"
@@ -76,16 +93,19 @@ class App extends React.Component {
 
     const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${id}`
 
-    axios.delete(url,headers)
-    .then((res)=>{
+  if(window.confirm(`tem certeza que deseja deletar a playlist: '${nome}'`)){
+    axios.delete(url, headers)
+    .then((res) => {
       this.pegarPlaylists()
       console.log(this.state.allPlaylists)
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err.data)
     })
   }
+   
+  }
 
-  infoPlaylist = (id)=> {
+  infoPlaylist = (id,nome) => {
 
     const headers = {
       headers: {
@@ -95,46 +115,54 @@ class App extends React.Component {
 
     const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${id}/tracks`
 
-    axios.get(url,headers)
-    .then((res)=>{
-      this.setState({playlistAtual: res.data.result.tracks})
-      console.log(this.state.playlistAtual)
-    }).catch((err)=>{
-      console.log(err.data)
-    })
-    
-    this.setState({pagAtual: 'infoPlaylist'})
+    axios.get(url, headers)
+      .then((res) => {
+        this.setState({
+           playlistAtual: res.data.result.tracks,
+           nomePlaylistAtual: nome,
+           idPlaylistAtual: id
+          })
+        this.setState({ pagAtual: 'infoPlaylist' })
+      }).catch((err) => {
+        console.log(err.data)
+      })
+
+  }
+
+  addState = ()=> {
+    this.setState({add: !this.state.add})
   }
 
 
   //..........................................................................
 
-  playlists = ()=> {
-    this.setState({pagAtual: 'playlists'})
+  playlists = () => {
+    this.setState({ pagAtual: 'playlists' })
   }
 
-  mainPage = ()=> {
-    this.setState({pagAtual: 'mainPage'})
+  mainPage = () => {
+    this.setState({ pagAtual: 'mainPage' })
   }
 
-  onChangeNomePlaylist = (e)=> {
-    this.setState({valorNomePlaylist: e.target.value})
+  onChangeNomePlaylist = (e) => {
+    this.setState({ valorNomePlaylist: e.target.value })
   }
 
-//............................................................................
+  //............................................................................
 
-  render(){
+  render() {
 
-    const playlists = this.state.allPlaylists.map((playlist)=>{
+    const playlists = this.state.allPlaylists.map((playlist) => {
       return (
-        <div>
-          <Info onClick={()=>{this.infoPlaylist(playlist.id,playlist.name)}}>
+        <ContainerPlaylist>
+          <Info onClick={() => { this.infoPlaylist(playlist.id, playlist.name) }}>
             <p>{playlist.name}</p>
-          </Info>        
-          <button onClick={()=> {this.deletarPlaylists(playlist.id)}} >X</button>
-        </div>
-      ) 
+          </Info>
+          <button onClick={() => { this.deletarPlaylists(playlist.id,playlist.name) }} >X</button>
+        </ContainerPlaylist>
+      )
     })
+
 
 
     switch (this.state.pagAtual) {
@@ -142,46 +170,54 @@ class App extends React.Component {
       case 'mainPage':
         return (
           <MainDiv>
+            <h1>Labefy</h1>
             <button onClick={this.playlists}>
-              criar nova playlist
+              Playlists
             </button>
-          </MainDiv>    
+          </MainDiv>
         )
       case 'playlists':
         return (
           <MainDiv>
             <AddPlaylist
-              mainPage = {this.mainPage}
-              valorNomePlaylist = {this.state.valorNomePlaylist}
-              onChangeNomePlaylist = {this.onChangeNomePlaylist}
-              criarPlaylist = {this.criarPlaylist}
+              mainPage={this.mainPage}
+              valorNomePlaylist={this.state.valorNomePlaylist}
+              onChangeNomePlaylist={this.onChangeNomePlaylist}
+              criarPlaylist={this.criarPlaylist}
             />
             {playlists}
-          </MainDiv>    
+            <button onClick={this.mainPage}>
+                    Voltar
+                </button>
+          </MainDiv>
         )
-        case 'infoPlaylist':
-        return (
+      case 'infoPlaylist':
+        return (         
           <MainDiv>
-            <div>
-              
-            </div>
-            <button onClick={this.playlists}>
-              voltar
-            </button>
-          </MainDiv>    
+            <InfoPlaylist
+              nomePlaylistAtual = {this.state.nomePlaylistAtual}
+              playlistPage = {this.playlists}
+              musicas = {this.state.playlistAtual}
+              add = {this.state.add}
+              addState = {this.addState}
+              id = {this.state.idPlaylistAtual}
+              nome = {this.state.nomePlaylistAtual}
+              infoPlaylist = {this.infoPlaylist}
+            />
+          </MainDiv>
         )
-        
-        
-    
+
+
+
       default:
-        return(
+        return (
           <div>erro</div>
         )
-        
+
     }
-    
+
   }
-  
+
 }
 
 export default App;

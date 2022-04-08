@@ -11,6 +11,8 @@ const Container = styled.div`
 
 class AddPlaylist extends React.Component {
 
+    
+
     render() {
         return (
             <Container>
@@ -25,9 +27,6 @@ class AddPlaylist extends React.Component {
                         Criar Playlist
                     </button>
                 </Criar>
-                <button onClick={this.mainPage}>
-                    Voltar
-                </button>
             </Container>
         )
     }
