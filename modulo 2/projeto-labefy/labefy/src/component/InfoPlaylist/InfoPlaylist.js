@@ -6,61 +6,76 @@ const Criar = styled.div`
 
 `
 
-const Container = styled.div`
+const Audio = styled.audio`
+background-color: black;
+border-radius: none;
+`
 
+const Container = styled.div`
+display: flex;
+flex-direction: column;
+border:solid 1px;
+background-color: white;
+
+h2{
+    margin: auto;
+}
 `
 
 class InfoPlaylist extends React.Component {
 
     state = {
         valorUrl: '',
-        valorArtista:'',
-        valorNome:''
+        valorArtista: '',
+        valorNome: ''
     }
 
-    addMusicas = ()=> {
+    addMusicas = () => {
         const body = {
             name: this.state.valorNome,
             artist: this.state.valorArtista,
             url: this.state.valorUrl
-          }
-      
-          const headers = {
+        }
+
+        // http://spoti4.future4.com.br/1.mp3
+
+        const headers = {
             headers: {
-              Authorization: "joao-aguiar-silveira"
+                Authorization: this.props.auth
             }
-          }
-      
-          const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${this.props.id}/tracks`
-      
-          axios.post(url, body, headers)
+        }
+
+        const url = `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${this.props.id}/tracks`
+
+        axios.post(url, body, headers)
             .then((res) => {
-            this.props.infoPlaylist(this.props.id,this.props.nome)
-            this.props.addState()
-            this.setState({
-                valorUrl: '',
-                valorArtista:'',
-                valorNome:''
-            })
+                this.props.infoPlaylist(this.props.id, this.props.nome)
+                this.props.addState()
+                this.setState({
+                    valorUrl: '',
+                    valorArtista: '',
+                    valorNome: ''
+                })
             }).catch((err) => {
-              console.log(err)
+                this.props.addState()
+                console.log(err)
             })
     }
 
     //................................................................
 
-    onChangeNome = (e)=> {
-        this.setState({valorNome: e.target.value})
+    onChangeNome = (e) => {
+        this.setState({ valorNome: e.target.value })
     }
 
-    onChangeArtista = (e)=> {
-        this.setState({valorArtista: e.target.value})
+    onChangeArtista = (e) => {
+        this.setState({ valorArtista: e.target.value })
     }
 
-    onChangeUrl = (e)=> {
-        this.setState({valorUrl: e.target.value})
+    onChangeUrl = (e) => {
+        this.setState({ valorUrl: e.target.value })
     }
-    
+
 
     render() {
 
@@ -68,12 +83,12 @@ class InfoPlaylist extends React.Component {
             return (
                 <div>
                     <h2>{musica.name} | {musica.artist}</h2>
-                    <audio controls src={musica.url}/>
+                    <Audio controls src={musica.url} />
                 </div>
             )
-          })
+        })
         let musicList;
-          if(this.props.add){
+        if (this.props.add) {
             musicList = (
                 <div>
                     <input
@@ -96,16 +111,16 @@ class InfoPlaylist extends React.Component {
                     </button>
                 </div>
             )
-          }
-          else{
+        }
+        else {
             musicList = (
-                  <div>
-                      <button onClick={this.props.addState}>
+                <div>
+                    <button onClick={this.props.addState}>
                         Adicionar Musica
-                      </button>
-                  </div>
-              )
-          }
+                    </button>
+                </div>
+            )
+        }
 
         return (
             <Container>
@@ -120,9 +135,9 @@ class InfoPlaylist extends React.Component {
             </Container>
         )
     }
-    
+
 }
-  
+
 
 
 export default InfoPlaylist;
