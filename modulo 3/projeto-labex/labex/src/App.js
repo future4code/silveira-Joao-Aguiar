@@ -1,10 +1,11 @@
-import HomePage from './pages/HomePage'
 import Global from './Global.css'
+import { Router } from './routes/router';
+
 
 function App() {
   return (
     <div>
-      <HomePage/>
+      <Router/>
     </div>
   );
 }

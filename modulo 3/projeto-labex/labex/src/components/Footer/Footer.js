@@ -7,7 +7,7 @@ align-items: center;
 gap: 20px;
 height: 100px;
 background-color: #8F85D8;
-box-shadow: 0px -10px 15px rgba(0,0,0);
+box-shadow: 0px -10px 15px rgba(0,0,0,0.7);
 `
 
 

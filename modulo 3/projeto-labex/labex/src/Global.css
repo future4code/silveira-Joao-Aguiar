@@ -1,4 +1,20 @@
 *{
     margin: 0px;
     padding: 0px;
+    
+}
+
+body{
+    background-color:#313B64;
+    font-family: 'Oxygen', sans-serif;
+}
+
+@font-face {
+    font-family: 'Bord';
+    src: url(./Fonts/BordDemo-axaBa.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'Anurati';
+    src: url(./Fonts/Anurati-Regular.otf) format('opentype');
 }
