@@ -1,6 +1,8 @@
 import styled from "styled-components"
 import Footer from "../components/Footer/Footer"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import axios from "axios"
 
 const Container = styled.div`
 
@@ -95,7 +97,8 @@ box-shadow: 0px 10px 15px rgba(0,0,0);
 
 
 export default function LoginPage(props) {
-
+    const [email,setEmail] = useState('')
+    const [senha,setSenha] = useState('')
     const nav = useNavigate()
 
 
@@ -103,9 +106,53 @@ export default function LoginPage(props) {
         nav('/')
     }
 
+    const setPageHAdminHome = () => {
+        nav('/AdminHome')
+    }
+
     const setPageTrips = () => {
         nav('/Trips')
     }
+
+    const onChangeEmail = (e)=> {
+        setEmail(e.target.value)
+    }
+
+    const onChangeSenha = (e)=> {
+        setSenha(e.target.value)
+    }
+
+    const logIn = ()=> {
+        const headers = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+
+        const body = {
+            email: email,
+            password: senha
+        }
+        const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labeX/joao-aguiar/login'
+
+        axios.post(url,body,headers)
+        .then((res)=>{
+            console.log(res.data)
+            localStorage.setItem('token',res.data.token)
+            setPageHAdminHome()
+        })
+        .catch((error)=> {
+            if((email || senha) == ''){
+                alert('Preencha os dois espaços')
+            }
+            else if(error.response.status == '401'){
+                alert('Email ou Senha incorretos')
+            }
+            else{alert(`Erro: ${error.message}`)}
+            console.log(error)
+        })
+    }
+
 
     return (
         <Container>
@@ -121,10 +168,10 @@ export default function LoginPage(props) {
                 <Display>
                     <h1>Login</h1>
                     <div>
-                        <input placeholder="E-mail" />
-                        <input placeholder="Senha" />
+                        <input onChange={onChangeEmail} value={email} placeholder="E-mail" />
+                        <input onChange={onChangeSenha} value={senha} placeholder="Senha" />
                     </div>
-                    <button>Entrar</button>
+                    <button onClick={logIn}>Entrar</button>
                 </Display>
             </Login>
             <Footer />
