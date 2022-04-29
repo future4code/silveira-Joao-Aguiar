@@ -2,29 +2,62 @@ import styled from "styled-components"
 import Footer from "../components/Footer/Footer"
 import { useState, useEffect } from "react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import CardTripAdimin from "../components/CardTripAdmin/CardtripAdmin"
 
 
 const Container = styled.div`
-
+.trips{
+    border:none;
+    border-radius: 10px;
+    width:150px;
+    height:30px;
+    background-color: #313B64;
+    color:White;
+    font-size: 20px;
+    cursor: pointer;
+    margin-right: 70px;
+}
 `
+
 
 const Section = styled.section`
 display: flex;
 flex-direction: column;
 align-items: center;
 color:white;
+text-align: center;
+margin: 25px;
+
+h1{
+    margin: 20px;
+}
+
+h2{
+    margin: 20px;
+}
 `
 
 const MenuPainel = styled.div`
+display:flex;
+margin:auto;
+padding: 10px;
+justify-content: center;
+align-items:center;
+background-color: #8F85D8;
+border-radius: 5px;
+width:160px;
+height: 40px;
 
+.trips{
+    margin-right: 0;
+}
 `
 
 const Display = styled.div`
-
 `
 
 const Menu = styled.div`
-margin-right: 70px;
 button{
     height: 35px;
     margin: 5px;
@@ -33,13 +66,6 @@ button{
     font-family: 'Oxygen', sans-serif;
     font-weight:bold;
     cursor: pointer;
-}
-
-.trips{
-    border:none;
-    border-radius: 10px;
-    width:150px;
-    background-color: #313B64;
 }
 `
 
@@ -62,12 +88,21 @@ margin-left: 20px;
 color:white;
 font-size: 23px;
 font-family: 'Bord';
-
 `
 
 
 export default function AdminHome(props){
     const [tripList,setTripList] = useState([])
+    const nav = useNavigate()
+
+    const setPageHomePage = ()=> {
+        nav('/')
+    }
+
+    const Logout = ()=> {
+        localStorage.removeItem('token')
+        nav('/LoginPage')
+    }
 
     const getTrips = ()=> {
         const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labeX/joao-aguiar/trips'
@@ -86,26 +121,28 @@ export default function AdminHome(props){
     },[])
 
     const trips = tripList.map((trip)=>{
-        return (<h3>{trip.name}</h3>)
+        return (<CardTripAdimin
+                    nome={trip.name}
+                    data={trip.date}
+                    id={trip.id}
+                />)
     })
 
     return(
         <Container>
             <Header>
                 <Logo>
-                <h1>LABEX</h1>
+                <h1 onClick={setPageHomePage}>LABEX</h1>
                 </Logo>
                 <Menu>
-                    
+                <button onClick={Logout} className="trips">Logout</button>
                 </Menu>
             </Header>
             <Section>
                 <Display>
                 <h1>Painel de controle</h1>
                 <MenuPainel>
-                    <button>Voltar</button>
-                    <button>Criar Viagem</button>
-                    <button>Logout</button>
+                    <button className="trips">Criar Viagem</button>
                 </MenuPainel>
                 <h2>Lista de Viagens</h2>
                 {trips}

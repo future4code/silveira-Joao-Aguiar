@@ -76,7 +76,12 @@ export default function HomePage(props) {
     const nav = useNavigate()
 
     const setPageAdmin = ()=> {
-        nav('/LoginPage')
+        if(localStorage.getItem('token')){
+            nav('/AdminHome')
+        }
+        else{
+            nav('/LoginPage')
+        }
     }
 
     const setPageTrips = ()=> {
