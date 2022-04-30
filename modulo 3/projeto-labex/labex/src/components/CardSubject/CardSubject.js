@@ -7,17 +7,44 @@ const Container = styled.div`
 `
 
 const Menu = styled.div`
+display:flex;
+
+button{
+    width:100%;
+    height:30px;
+    border:none;
+    font-size: 15px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.aproved{
+    background-color: green;
+}
+
+.disaproved{
+    background-color: red;
+}
+
 
 `
 
 const Display = styled.div`
-margin: 10px;
+margin: 20px;
 border: solid 1px;
 border-radius: 5px;
+overflow: hidden;
+
+h3{
+    text-align: center;
+}
 `
 
 
 export default function CardSubject(props){
+
+
     
 
     return(
@@ -29,8 +56,8 @@ export default function CardSubject(props){
                 <h5>Profissão: {props.profissao}</h5>
                 <h5>País: {props.pais}</h5>
                 <Menu>
-                    <button>Aprovado</button>
-                    <button>Desaprovado</button>
+                    <button className="aproved">Aprovado</button>
+                    <button className="disaproved">Desaprovado</button>
                 </Menu>
             </Display>
         </Container>

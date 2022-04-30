@@ -71,12 +71,16 @@ align-items:center;
 
 const Display = styled.div`
 width: 60%;
-margin: 20px;
+margin: 30px;
 border-radius: 5px;
 background-color: white;
 text-align: left;
 
 h1{
+    text-align: center;
+}
+
+h2{
     text-align: center;
 }
 
@@ -100,19 +104,7 @@ export default function TripsDetail(props){
     const [candidates,setCandiddates] = useState([])
     const params = useParams()
     const nav = useNavigate()
-    const candidato = candidates.map((candidato)=>{
-        return (
-            <CardSubject
-                key={candidato.id}
-                nome={candidato.name}
-                textoAplicacao={candidato.applicationText}
-                profissao={candidato.profession}
-                idade={candidato.age}
-                pais={candidato.country}
-                id={candidato.id}
-            />
-        )
-    })
+    const [listaAprovados,setListaAprovados] = useState([])
 
 
     const setPageHomePage = ()=> {
@@ -148,7 +140,19 @@ export default function TripsDetail(props){
     },[])
 
 
-
+    const candidato = candidates.map((candidato)=>{
+        return (
+            <CardSubject
+                key={candidato.id}
+                nome={candidato.name}
+                textoAplicacao={candidato.applicationText}
+                profissao={candidato.profession}
+                idade={candidato.age}
+                pais={candidato.country}
+                id={candidato.id}
+            />
+        )
+    })
 
     return(
         <Container>
@@ -177,7 +181,6 @@ export default function TripsDetail(props){
                     </Candidatos>
                 </Display>
             </Section>                          
-            <Footer/>
         </Container>
     )
 }

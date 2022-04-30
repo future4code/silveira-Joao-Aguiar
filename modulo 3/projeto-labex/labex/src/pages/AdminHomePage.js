@@ -40,21 +40,28 @@ h2{
 
 const MenuPainel = styled.div`
 display:flex;
-margin:auto;
 padding: 10px;
 justify-content: center;
 align-items:center;
 background-color: #8F85D8;
 border-radius: 5px;
-width:160px;
+width:130%;
 height: 40px;
 
 .trips{
-    margin-right: 0;
+    margin-right: 0;S
 }
 `
 
 const Display = styled.div`
+display:flex;
+flex-direction: column;
+align-items:center;
+`
+
+const List = styled.div`
+width 130%;
+margin-right: 17px;
 `
 
 const Menu = styled.div`
@@ -91,64 +98,69 @@ font-family: 'Bord';
 `
 
 
-export default function AdminHome(props){
-    const [tripList,setTripList] = useState([])
+export default function AdminHome(props) {
+    const [tripList, setTripList] = useState([])
     const nav = useNavigate()
 
-    const setPageHomePage = ()=> {
+    const setPageHomePage = () => {
         nav('/')
     }
 
-    const Logout = ()=> {
+    const setPageCreateTrip = () => {
+        nav('/CreateTrip')
+    }
+
+    const Logout = () => {
         localStorage.removeItem('token')
         nav('/LoginPage')
     }
 
-    const getTrips = ()=> {
+    const getTrips = () => {
         const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labeX/joao-aguiar/trips'
         axios.get(url)
-        .then((res)=>{
-            setTripList(res.data.trips)
-            console.log(tripList)
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+            .then((res) => {
+                setTripList(res.data.trips)
+                console.log(tripList)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getTrips()
-    },[])
+    }, [])
 
-    const trips = tripList.map((trip)=>{
+    const trips = tripList.map((trip) => {
         return (<CardTripAdimin
-                    nome={trip.name}
-                    data={trip.date}
-                    id={trip.id}
-                />)
+            nome={trip.name}
+            data={trip.date}
+            id={trip.id}
+            getTrips={getTrips}
+        />)
     })
 
-    return(
+    return (
         <Container>
             <Header>
                 <Logo>
-                <h1 onClick={setPageHomePage}>LABEX</h1>
+                    <h1 onClick={setPageHomePage}>LABEX</h1>
                 </Logo>
                 <Menu>
-                <button onClick={Logout} className="trips">Logout</button>
+                    <button onClick={Logout} className="trips">Logout</button>
                 </Menu>
             </Header>
             <Section>
                 <Display>
-                <h1>Painel de controle</h1>
-                <MenuPainel>
-                    <button className="trips">Criar Viagem</button>
-                </MenuPainel>
-                <h2>Lista de Viagens</h2>
-                {trips}
+                    <h1>Painel de controle</h1>
+                    <MenuPainel>
+                        <button onClick={setPageCreateTrip} className="trips">Criar Viagem</button>
+                    </MenuPainel>
+                    <List>
+                        {trips}
+                    </List>
                 </Display>
-            </Section>                           
-            <Footer/>
+            </Section>
         </Container>
     )
 }

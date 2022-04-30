@@ -9,7 +9,15 @@ overflow: hidden;
 margin: 10px;
 color: black;
 background-color: white;
-width: 600px;
+width: 100%;
+`
+
+const Info = styled.div`
+display:flex;
+gap: 10px;
+justify-content: space-between;
+width:80%;
+align-items: center;
 `
 
 const Del = styled.div`
@@ -77,12 +85,34 @@ export default function CardTripAdimin(props){
     }
 
     const delTrip = ()=> {
-        console.log(`trip ${props.nome} deletada`)
+        const header = {
+            headers:{
+                auth: localStorage.getItem('token')
+            }
+        }
+
+        const url = `https://us-central1-labenu-apis.cloudfunctions.net/labeX/joao-aguiar/trips/${props.id}`
+
+        if(window.confirm(`Tem certeza que deseja deletar este o item ${props.name}?`)){
+
+            axios.delete(url,header)
+            .then((res)=>{
+                props.getTrips()
+
+            })
+            .catch((err)=>{
+
+            })
+
+
+        } 
+
     }
 
     const setPageDetail = ()=> {
         nav(`/TripDetail/${props.id}`)
     }
+
 
     useEffect(()=>{
         getTripDetails()
@@ -91,10 +121,12 @@ export default function CardTripAdimin(props){
 
     return(
         <Container>
-            <Display onClick={setPageDetail}>
+            <Display>
+                <Info onClick={setPageDetail}>
                 <h3>{props.nome}</h3>
-                <p>Data: {props.data}</p>
                 <p>Candidatos: {numeroCandidatos}</p>
+                <p>Data: {props.data}</p>
+                </Info>
                 <Del>
                 <button onClick={delTrip}><i class="fa-solid fa-trash"/></button>
             </Del>
