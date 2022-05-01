@@ -43,21 +43,19 @@ h3{
 
 
 export default function CardSubject(props){
-
-
     
 
     return(
         <Container>
             <Display >
                 <h3>{props.nome}</h3>
-                <h5>Texto para aplucação:<br/>{props.textoAplicacao}</h5>
+                <h5>Texto para aplicação:<br/>{props.textoAplicacao}</h5>
                 <h5>Idade: {props.idade}</h5>
                 <h5>Profissão: {props.profissao}</h5>
                 <h5>País: {props.pais}</h5>
                 <Menu>
-                    <button className="aproved">Aprovado</button>
-                    <button className="disaproved">Desaprovado</button>
+                    <button onClick={()=>{props.approve(true,props.id)}} className="aproved">Aprovado</button>
+                    <button onClick={()=>{props.approve(false,props.id)}} className="disaproved">Desaprovado</button>
                 </Menu>
             </Display>
         </Container>

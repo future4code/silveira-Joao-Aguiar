@@ -102,10 +102,9 @@ border-top: solid 2px;
 export default function TripsDetail(props){
     const [trip,setTrip] = useState({})
     const [candidates,setCandiddates] = useState([])
+    const [aprovados,setAprovados] = useState([])
     const params = useParams()
     const nav = useNavigate()
-    const [listaAprovados,setListaAprovados] = useState([])
-
 
     const setPageHomePage = ()=> {
         nav('/')
@@ -113,6 +112,33 @@ export default function TripsDetail(props){
 
     const setPageAdminHome = ()=> {
         nav('/AdminHome')
+    }
+
+    const approve = (resposta,id)=> {
+        const header = {
+            headers:{
+                auth: localStorage.getItem('token')
+            }
+        }
+
+        const body = {
+            approve: resposta
+        }
+        
+        const url = `https://us-central1-labenu-apis.cloudfunctions.net/labeX/joao-aguiar/trips/${trip.id}/candidates/${id}/decide`
+
+        axios.put(url,body,header)
+        .then((res)=>{
+            if(resposta){
+                alert('Candidato aprovado')
+            }else{
+                alert('Candidato desaprovado')
+            }
+            getTripDetails()
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
     }
 
     const getTripDetails = ()=> {
@@ -140,7 +166,7 @@ export default function TripsDetail(props){
     },[])
 
 
-    const candidato = candidates.map((candidato)=>{
+    const candidato = candidates.map((candidato,index)=>{
         return (
             <CardSubject
                 key={candidato.id}
@@ -150,6 +176,7 @@ export default function TripsDetail(props){
                 idade={candidato.age}
                 pais={candidato.country}
                 id={candidato.id}
+                approve={approve}
             />
         )
     })

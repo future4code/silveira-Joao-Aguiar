@@ -10,7 +10,7 @@ const Container = styled.div`
 `
 
 const Section = styled.section`
-
+min-height:450px;
 `
 
 const Logo = styled.div`
@@ -68,16 +68,12 @@ export default function ListTrips(props) {
         nav('/AppForm')
     }
 
-    const test = ()=> {
-        console.log(trips)
-    }
 
     const getTrips = ()=> {
         const url = 'https://us-central1-labenu-apis.cloudfunctions.net/labeX/joao-aguiar/trips'
         axios.get(url)
         .then((res)=>{
             setTrips(res.data.trips)
-            console.log(trips)
         })
         .catch((err)=>{
 
@@ -109,7 +105,6 @@ export default function ListTrips(props) {
                 <h1>LABEX</h1>
                 </Logo>
                 <Menu>
-                    <button onClick={setPageHomePage} className="trips">Voltar</button>
                     <button onClick={setPageAppForm} className="trips">Inscrever-se</button>
                 </Menu>
             </Header>
