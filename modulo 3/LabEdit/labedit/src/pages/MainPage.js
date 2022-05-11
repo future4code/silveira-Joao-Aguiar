@@ -2,6 +2,10 @@ import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 import { Navigation } from "../routes/cordinator"
 import { corNeutra, corPrimaria, corSecundaria } from '../constants/colors'
+import axios from "axios"
+import { BASE_URL } from "../constants/urls"
+import { useEffect, useState } from "react"
+import { Post } from "../components/post/post"
 
 const Container = styled.div`
 display: flex;
@@ -11,7 +15,14 @@ align-items: center;
 `
 
 const Posts = styled.div`
-
+display: flex;
+gap: 10px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+width: 100%;
+margin-top:20px;
+margin-bottom:20px;
 `
 
 
@@ -35,14 +46,14 @@ hr{
 }
 
 form{
-    width: 80%;
+    width: 90%;
     display: flex;
     flex-direction: column;
 
     textarea{
         border-radius: 10px;
         margin-bottom: 10px;
-        height: 120px;
+        height: 150px;
     }
 
     button{
@@ -53,27 +64,85 @@ form{
         background-color: ${corNeutra};
         color: white;
     }
+
+    input{
+        border: solid 1px;
+        border-radius: 5px;
+        height: 25px;
+        margin-bottom: 10px;
+    }
 }
 `
 
-
-
 export function MainPage() {
-    const nav = useNavigate()
-    const params = useParams()
+
+const [posts,setPosts] = useState()
+const [text,setText] = useState('')
+const [title,setTitle] = useState('')
+const nav = useNavigate()
+const params = useParams()
+
+const getPosts = ()=> {
+
+    const headers = {
+        headers: {
+            Authorization: localStorage.getItem('token')
+        }
+    }
+    
+    axios.get(`${BASE_URL}/posts`,headers)
+    .then((res)=>{
+        console.log(res.data)
+        setPosts(res.data)      
+    })
+    .catch((err)=>{
+        console.log(err)
+        console.log(headers)
+        
+    })
+}
+
+useEffect(()=>{
+    getPosts()
+},[])
+
+const onChangeText = (e) => {
+    setText(e.target.value)
+}
+
+const onChangeTitle = (e) => {
+    setTitle(e.target.value)
+}
 
 const logOut = ()=>{
     localStorage.removeItem('token')
     Navigation(nav,'/')
 }
 
-const test = ()=>{
-    let valor = localStorage.getItem('token')
-    console.log(valor)
-}
-
 const postar = (e)=>{
     e.preventDefault()
+
+    const BODY = {
+        title: title,
+	    body: text
+    }
+
+    const headers = {
+        headers: {
+            Authorization: localStorage.getItem('token')
+        }
+    }
+
+    axios.post(`${BASE_URL}/posts`,BODY,headers)
+    .then((res)=>{
+        alert(res.data)
+        setText('')
+        setTitle('')
+        getPosts()
+    })
+    .catch((err)=>{
+        console.log(err)
+    })
 }
     return (
         <Container>
@@ -83,12 +152,26 @@ const postar = (e)=>{
             </Header>
             <Section>
                 <form onSubmit={postar}>
-                    <textarea placeholder="escreva seu post..."/>
-                    <button onClick={test}>Postar</button>
+                    <input onChange={onChangeTitle} value={title} required type='text' placeholder="Titulo"/>
+                    <textarea required onChange={onChangeText} value={text} placeholder="escreva seu post..."/>
+                    <button>Postar</button>
                 </form>
                 <hr/>
                 <Posts>
-                    <h1>Posts</h1>
+                    {posts && posts.map((post)=>{
+                       return(
+                           <Post 
+                            key={post.id}
+                            id={post.id}
+                            titulo={post.title}
+                            body={post.body}
+                            userName={post.username}
+                            voteSum={post.voteSum}
+                            commentCount={post.commentCount}
+                            userVote={post.userVote}
+                           />
+                       ) 
+                    })}
                 </Posts>
             </Section>  
         </Container>
