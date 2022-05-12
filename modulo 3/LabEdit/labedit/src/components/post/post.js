@@ -3,6 +3,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { BASE_URL } from "../../constants/urls"
+import { handleLikes } from "../../functions/likesMainPage"
 import { Navigation } from "../../routes/cordinator"
 
 const Container = styled.div`
@@ -60,14 +61,19 @@ export function Post(props) {
 
     const clickLike = () => {
         setLike(!like)
+        setDislike(false)
+        handleLikes(props.id,props.userVote,1,'posts')
     }
 
     const clickDislike = () => {
+        setLike(false)
         setDislike(!dislike)
+        handleLikes(props.id,props.userVote,-1,'posts')
     }
 
-    const setPageComents = ()=>{
-        Navigation(nav,`/commentPage/${props.id}`)
+    const setPageComents = () => {
+        let treatedBody = props.body.replace("?", "%3F")
+        Navigation(nav, `/commentPage/${props.id}/${props.userName}/${props.commentCount}/${props.voteSum}/${props.title}/${treatedBody}`)
     }
 
 
@@ -85,9 +91,9 @@ export function Post(props) {
                 <Like>
                     {like ? <i onClick={clickLike} class="fa-solid fa-circle-up" />
                         :
-                        <i  onClick={clickLike} class="fa-regular fa-circle-up" />}
+                        <i onClick={clickLike} class="fa-regular fa-circle-up" />}
                 </Like>
-                <p> {(props.voteSum == null)? 0 : props.voteSum} </p>
+                <p> {(props.voteSum == null) ? 0 : props.voteSum} </p>
                 <Dislike>
                     {dislike ? <i onClick={clickDislike} class="fa-solid fa-circle-down" />
                         :
@@ -95,7 +101,7 @@ export function Post(props) {
                 </Dislike>
                 <div>
                     <i onClick={setPageComents} class="fa-regular fa-message" />
-                    <p> {(props.commentCount == null)? 0 : props.commentCount} </p>
+                    <p> {(props.commentCount == null) ? 0 : props.commentCount} </p>
                 </div>
             </Menu>
 

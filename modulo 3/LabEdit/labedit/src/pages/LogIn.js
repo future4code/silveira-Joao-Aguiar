@@ -101,7 +101,7 @@ export function Login() {
         .then((res)=>{
             console.log(res)
             localStorage.setItem('token',res.data.token)
-            Navigation(nav,'mainPage')
+            Navigation(nav,'/mainPage')
         })
         .catch((err)=>{
             console.log(err)

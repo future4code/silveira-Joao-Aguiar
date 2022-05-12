@@ -63,6 +63,7 @@ form{
         height: 35px;
         background-color: ${corNeutra};
         color: white;
+        font-size: 18px;
     }
 
     input{
@@ -90,7 +91,7 @@ const getPosts = ()=> {
         }
     }
     
-    axios.get(`${BASE_URL}/posts`,headers)
+    axios.get(`${BASE_URL}/posts?page=${1}&size=${10}`,headers)
     .then((res)=>{
         console.log(res.data)
         setPosts(res.data)      
@@ -163,7 +164,7 @@ const postar = (e)=>{
                            <Post 
                             key={post.id}
                             id={post.id}
-                            titulo={post.title}
+                            title={post.title}
                             body={post.body}
                             userName={post.username}
                             voteSum={post.voteSum}
