@@ -26,12 +26,28 @@ form{
     margin-bottom: 60px;
 }
 `
-const Logo = styled.div`
-width: 100%;
+const Header = styled.header`
 display: flex;
-justify-content: space-evenly;
+justify-content: space-between;
 align-items: center;
+width: 100%;
 background-color: ${corPrimaria};
+box-shadow: 0px 0px 10px;
+
+h1{
+    margin-left: 30px;
+}
+
+button{
+    border: none;
+    border-radius: 10px;
+    width: 160px;
+    height: 35px;
+    margin-right: 30px;
+    background-color: ${corNeutra};
+    color: white;
+    font-size: 20px;
+}
 `
 
 const Box = styled.div`
@@ -70,32 +86,37 @@ button{
     border-radius: 20px;
     background-color: ${corNeutra};
     color: white;
+    font-size: 20px;
 }
 `
 
 export function SignUp() {
-    const [user,setUser] = useState('')
-    const [email,setEmail] = useState('')
-    const [senha,setSenha] = useState('')
+    const [user, setUser] = useState('')
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
     const nav = useNavigate()
 
-    const enviar = (e)=>{
-        console.log(user,email,senha)
+    const enviar = (e) => {
         e.preventDefault()
         const BODY = {
             username: user,
-	        email: email,
-	        password: senha
+            email: email,
+            password: senha
         }
 
-        axios.post(`${BASE_URL}/users/signup`,BODY)
-        .then((res)=>{
-            localStorage.setItem('token',res.data.token)
-            Navigation(nav,'/')
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+        if(senha.length < 8){
+            alert('sua senha precisa ter no mínimo 8 diditos')
+        }
+        else{
+            axios.post(`${BASE_URL}/users/signup`, BODY)
+            .then((res) => {
+                localStorage.setItem('token', res.data.token)
+                Navigation(nav, '/')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
     }
 
     const onChangeUser = (e) => {
@@ -112,27 +133,27 @@ export function SignUp() {
 
     return (
         <Container>
-            <Logo>
-                <p>Logo</p>
-                <button onClick={()=>Navigation(nav,'/')}>Entrar</button>
-            </Logo>
+            <Header>
+                <h1>Labedit</h1>
+                <button onClick={() => Navigation(nav, '/')}>Entrar</button>
+            </Header>
             <h1 className='copywrite'>Olá,boas vindas ao Labedit</h1>
             <form onSubmit={enviar}>
                 <Inputs>
                     <input value={user}
-                      onChange={onChangeUser}
-                      required placeholder='nome de usuário' 
-                      type='text' />
+                        onChange={onChangeUser}
+                        required placeholder='nome de usuário'
+                        type='text' />
 
                     <input value={email}
-                      onChange={onChangeEmail}
-                      required placeholder='email' 
-                      type='email' />
+                        onChange={onChangeEmail}
+                        required placeholder='email'
+                        type='email' />
 
                     <input value={senha}
-                      onChange={onChangeSenha}
-                      required placeholder='senha' 
-                      type='password' />
+                        onChange={onChangeSenha}
+                        required placeholder='senha'
+                        type='password' />
                 </Inputs>
                 <Terms>
                     <p>Ao continuar,você concorda com o nosso

@@ -4,7 +4,7 @@ import { BASE_URL } from "../constants/urls";
 
 
 
-export function handleLikes(id, userVote, vote, location) {
+export function handleLikes(id, userVote, vote, location, update) {
 
     const headers = {
         headers: {
@@ -19,8 +19,7 @@ export function handleLikes(id, userVote, vote, location) {
     if (userVote == null) {
         axios.post(`${BASE_URL}/${location}/${id}/votes`, BODY, headers)
             .then((res) => {
-                console.log(res)
-                console.log('vote criado')
+                update()
             })
             .catch((err) => {
                 console.log(err)
@@ -29,8 +28,7 @@ export function handleLikes(id, userVote, vote, location) {
         if (userVote == vote) {
             axios.delete(`${BASE_URL}/${location}/${id}/votes`, headers)
                 .then((res) => {
-                    console.log(res)
-                    console.log('vote deletado')
+                    update()
                 })
                 .catch((err) => {
                     console.log(err)
@@ -38,8 +36,7 @@ export function handleLikes(id, userVote, vote, location) {
         } else {
             axios.put(`${BASE_URL}/${location}/${id}/votes`, BODY, headers)
                 .then((res) => {
-                    console.log(res)
-                    console.log('vote mudado')
+                    update()
                 })
                 .catch((err) => {
                     console.log(err)
@@ -47,3 +44,5 @@ export function handleLikes(id, userVote, vote, location) {
         }
     }
 }
+
+

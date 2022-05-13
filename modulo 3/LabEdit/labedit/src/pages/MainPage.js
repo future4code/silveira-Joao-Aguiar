@@ -14,6 +14,13 @@ justify-content: center;
 align-items: center;
 `
 
+const Pagination = styled.div`
+display: flex;
+gap: 50px;
+justify-content: center;
+align-items: center;
+`
+
 const Posts = styled.div`
 display: flex;
 gap: 10px;
@@ -23,15 +30,35 @@ align-items: center;
 width: 100%;
 margin-top:20px;
 margin-bottom:20px;
+
+.loading{
+    font-size: 50px;
+}
 `
 
 
 const Header = styled.header`
 display: flex;
-justify-content: space-evenly;
+justify-content: space-between;
 align-items: center;
 width: 100%;
 background-color: ${corPrimaria};
+box-shadow: 0px 0px 10px;
+
+h1{
+    margin-left: 30px;
+}
+
+button{
+    border: none;
+    border-radius: 10px;
+    width: 160px;
+    height: 35px;
+    margin-right: 30px;
+    background-color: ${corNeutra};
+    color: white;
+    font-size: 20px;
+}
 `
 
 const Section = styled.section`
@@ -77,104 +104,130 @@ form{
 
 export function MainPage() {
 
-const [posts,setPosts] = useState()
-const [text,setText] = useState('')
-const [title,setTitle] = useState('')
-const nav = useNavigate()
-const params = useParams()
+    const [posts, setPosts] = useState()
+    const [text, setText] = useState('')
+    const [title, setTitle] = useState('')
+    const [pag, setPag] = useState(1)
+    const nav = useNavigate()
+    const params = useParams()
 
-const getPosts = ()=> {
+    const getPosts = () => {
 
-    const headers = {
-        headers: {
-            Authorization: localStorage.getItem('token')
+        const headers = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
         }
-    }
-    
-    axios.get(`${BASE_URL}/posts?page=${1}&size=${10}`,headers)
-    .then((res)=>{
-        console.log(res.data)
-        setPosts(res.data)      
-    })
-    .catch((err)=>{
-        console.log(err)
-        console.log(headers)
-        
-    })
-}
 
-useEffect(()=>{
-    getPosts()
-},[])
+        axios.get(`${BASE_URL}/posts?page=${pag}&size=${10}`, headers)
+            .then((res) => {
+                setPosts(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+                console.log(headers)
 
-const onChangeText = (e) => {
-    setText(e.target.value)
-}
-
-const onChangeTitle = (e) => {
-    setTitle(e.target.value)
-}
-
-const logOut = ()=>{
-    localStorage.removeItem('token')
-    Navigation(nav,'/')
-}
-
-const postar = (e)=>{
-    e.preventDefault()
-
-    const BODY = {
-        title: title,
-	    body: text
+            })
     }
 
-    const headers = {
-        headers: {
-            Authorization: localStorage.getItem('token')
-        }
-    }
-
-    axios.post(`${BASE_URL}/posts`,BODY,headers)
-    .then((res)=>{
-        alert(res.data)
-        setText('')
-        setTitle('')
+    useEffect(() => {
         getPosts()
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
-}
+    }, [])
+
+    const changePag = (direction) => {
+        // direction pode ser 1 ou -1
+        if (pag < 1) {
+            setPag(1)
+        }
+        else {
+            setPag(pag + direction)
+            getPosts()
+        }
+    }
+
+    const onChangeText = (e) => {
+        setText(e.target.value)
+    }
+
+    const onChangeTitle = (e) => {
+        setTitle(e.target.value)
+    }
+
+    const logOut = () => {
+        localStorage.removeItem('token')
+        Navigation(nav, '/')
+    }
+
+    const postar = (e) => {
+        e.preventDefault()
+
+        const BODY = {
+            title: title,
+            body: text
+        }
+
+        const headers = {
+            headers: {
+                Authorization: localStorage.getItem('token')
+            }
+        }
+
+        axios.post(`${BASE_URL}/posts`, BODY, headers)
+            .then((res) => {
+                alert(res.data)
+                setText('')
+                setTitle('')
+                getPosts()
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
     return (
         <Container>
             <Header>
-            <p>Logo</p>
-            <button onClick={logOut}>logout</button>
+                <h1>Labedit</h1>
+                <button onClick={logOut}>logout</button>
             </Header>
             <Section>
                 <form onSubmit={postar}>
-                    <input onChange={onChangeTitle} value={title} required type='text' placeholder="Titulo"/>
-                    <textarea required onChange={onChangeText} value={text} placeholder="escreva seu post..."/>
+                    <input onChange={onChangeTitle} value={title} required type='text' placeholder="Titulo" />
+                    <textarea required onChange={onChangeText} value={text} placeholder="escreva seu post..." />
                     <button>Postar</button>
                 </form>
-                <hr/>
+                <hr />
                 <Posts>
-                    {posts && posts.map((post)=>{
-                       return(
-                           <Post 
-                            key={post.id}
-                            id={post.id}
-                            title={post.title}
-                            body={post.body}
-                            userName={post.username}
-                            voteSum={post.voteSum}
-                            commentCount={post.commentCount}
-                            userVote={post.userVote}
-                           />
-                       ) 
-                    })}
+
+                    {
+                        !posts ?
+                            <div className="loading">
+                                <i class="fa-solid fa-spinner fa-spin-pulse" />
+                            </div>
+                            :
+                            posts.map((post) => {
+                                return (
+                                    <Post
+                                        key={post.id}
+                                        id={post.id}
+                                        title={post.title}
+                                        body={post.body}
+                                        userName={post.username}
+                                        voteSum={post.voteSum}
+                                        commentCount={post.commentCount}
+                                        userVote={post.userVote}
+                                        getPosts={getPosts}
+                                    />
+                                )
+                            })
+
+                    }
+                    <Pagination>
+                        <button onClick={() => changePag(-1)}><i class="fa-solid fa-angle-left" /></button>
+                        <p>{pag}</p>
+                        <button onClick={() => changePag(1)}><i class="fa-solid fa-angle-right" /></button>
+                    </Pagination>
                 </Posts>
-            </Section>  
-        </Container>
+            </Section>
+        </Container >
     )
 }

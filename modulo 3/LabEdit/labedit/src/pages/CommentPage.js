@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { CommentCard } from "../components/coment/coment"
 import { corNeutra, corPrimaria } from "../constants/colors"
 import { BASE_URL } from "../constants/urls"
+import { handleLikes } from "../functions/setLikes"
 import { Navigation } from "../routes/cordinator"
 
 const Container = styled.div`
@@ -50,14 +51,34 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 width: 100%;
+
+.loading{
+    font-size: 50px;
+}
 `
 
 const Header = styled.header`
 display: flex;
-justify-content: space-evenly;
+justify-content: space-between;
 align-items: center;
 width: 100%;
 background-color: ${corPrimaria};
+box-shadow: 0px 0px 10px;
+
+h1{
+    margin-left: 30px;
+}
+
+button{
+    border: none;
+    border-radius: 10px;
+    width: 160px;
+    height: 35px;
+    margin-right: 30px;
+    background-color: ${corNeutra};
+    color: white;
+    font-size: 20px;
+}
 `
 
 const Post = styled.div`
@@ -94,6 +115,7 @@ display: flex;
 align-items: center;
 justify-content: space-evenly;
 gap: 10px;
+margin: 6px;
 
 i{
     font-size: 25px;
@@ -118,10 +140,14 @@ export function CommentPage() {
 
     const clickLike = () => {
         setLike(!like)
+        setDislike(false)
+        handleLikes(params.id, params.userVote, 1, "posts", getComments)
     }
 
     const clickDislike = () => {
         setDislike(!dislike)
+        setLike(false)
+        handleLikes(params.id, params.userVote, -1, "posts", getComments)
     }
 
     const onChangeText = (e) => {
@@ -148,12 +174,10 @@ export function CommentPage() {
 
         axios.get(`${BASE_URL}/posts/${params.id}/comments`, headers)
             .then((res) => {
-                console.log(res.data)
                 setComments(res.data)
             })
             .catch((err) => {
                 console.log(err)
-                console.log(params.id)
             })
 
     }
@@ -169,7 +193,7 @@ export function CommentPage() {
             body: text
         }
 
-        axios.post(`${BASE_URL}/posts/${params.id}/comments`,BODY, headers)
+        axios.post(`${BASE_URL}/posts/${params.id}/comments`, BODY, headers)
             .then((res) => {
                 alert(res.data)
                 getComments()
@@ -181,13 +205,18 @@ export function CommentPage() {
 
     useEffect(() => {
         getComments()
+        if (params.userVote == 1) {
+            setLike(true)
+        } else if (params.userVote == -1) {
+            setDislike(true)
+        }
     }, [])
 
     return (
 
         <Container>
             <Header>
-                <p>Logo</p>
+                <h1>Labedit</h1>
                 <button onClick={setPageMainPage}>Voltar</button>
             </Header>
             <Post>
@@ -206,16 +235,11 @@ export function CommentPage() {
                             :
                             <i onClick={clickLike} class="fa-regular fa-circle-up" />}
                     </Like>
-                    <p> {(params.voteSum == null) ? 0 : params.voteSum} </p>
                     <Dislike>
                         {dislike ? <i onClick={clickDislike} class="fa-solid fa-circle-down" />
                             :
                             <i onClick={clickDislike} class="fa-regular fa-circle-down" />}
                     </Dislike>
-                    <div>
-                        <i class="fa-regular fa-message" />
-                        <p> {(params.comments == null) ? 0 : params.comments} </p>
-                    </div>
                 </Menu>
             </Post>
             <hr />
@@ -225,13 +249,23 @@ export function CommentPage() {
             </CommentArea>
             <hr />
             <Comments>
-                {comments && comments.map((comment) => {
-                    return <CommentCard
-                        voteSum={comment.voteSum}
-                        body={comment.body}
-                        userName={comment.username}
-                    />
-                })}
+                {
+                    !comments ?
+                        <div className="loading">
+                            <i class="fa-solid fa-spinner fa-spin-pulse" />
+                        </div>
+                        :
+                        comments.map((comment) => {
+                            return <CommentCard
+                                id={comment.id}
+                                userVote={comment.userVote}
+                                getComments={getComments}
+                                key={comment.id}
+                                voteSum={comment.voteSum}
+                                body={comment.body}
+                                userName={comment.username}
+                            />
+                        })}
             </Comments>
 
         </Container>

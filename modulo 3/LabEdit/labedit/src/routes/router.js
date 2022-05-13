@@ -12,7 +12,7 @@ export function Router() {
                     <Route index element={<Login />} />
                     <Route path='signup' element={<SignUp />} />
                     <Route path='mainPage' element={<MainPage />} />
-                    <Route path='commentPage/:id/:user/:comments/:voteSum/:title/:body' element={<CommentPage />} />
+                    <Route path='commentPage/:id/:user/:comments/:voteSum/:userVote/:title/:body' element={<CommentPage />} />
                 </Routes>
             </BrowserRouter>
     )

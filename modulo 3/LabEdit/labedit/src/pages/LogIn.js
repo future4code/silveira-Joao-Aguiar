@@ -38,6 +38,10 @@ p{
     margin: 0;
     margin-bottom: 20px;
 }
+
+.madeBy{
+    font-size: 15px;
+}
 `
 
 const Display = styled.div`
@@ -99,7 +103,6 @@ export function Login() {
 
         axios.post(`${BASE_URL}/users/login`,BODY)
         .then((res)=>{
-            console.log(res)
             localStorage.setItem('token',res.data.token)
             Navigation(nav,'/mainPage')
         })
@@ -127,6 +130,7 @@ export function Login() {
                 
                 <h1> Labedit </h1>
                 <p>O projeto de rede social da Labenu</p>
+                <p className='madeBy'>{`made by @jmaraguiar`}</p>
             </Logo>
             <Display>
                 <form onSubmit={fazerLogin}>
