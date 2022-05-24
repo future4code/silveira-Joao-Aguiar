@@ -1,0 +1,12 @@
+{
+  "name": "exercicio3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Ex3.js",
+  "scripts": {
+    "tarefas": "clear && node Ex3.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

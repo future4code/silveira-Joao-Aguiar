@@ -1,0 +1,11 @@
+{
+  "name": "exercicio1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Ex1.js",
+  "scripts": {
+    "nome-idade": "clear && node Ex1.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
