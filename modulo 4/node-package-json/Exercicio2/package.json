@@ -1,0 +1,11 @@
+{
+  "name": "exercicio2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "Ex2.js",
+  "scripts": {
+    "multiply": "clear && node Ex2.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
