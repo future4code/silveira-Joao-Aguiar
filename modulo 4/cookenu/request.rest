@@ -1,0 +1,21 @@
+
+
+POST http://localhost:3003/users
+Content-Type: application/json
+
+{
+    "name": "Mina",
+    "email": "ObraboDoBackend@labenu.com",
+    "password": "brabodemais",
+    "role": "ADMIN"
+}
+
+###
+
+POST http://localhost:3003/users/login
+Content-Type: application/json
+
+{
+    "email": "ObraboDoBackend@labenu.com",
+    "password": "brabodemais"
+}
