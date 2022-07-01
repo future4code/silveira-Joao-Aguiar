@@ -9,8 +9,14 @@ app.get("/users/:id" , userController.getOtherUserProfile)
 
 app.get("/recipe/:id" , userController.getRecipeById)
 
+app.get("/followed" , userController.getUserFollows)
+
+app.get("/recipes" , userController.getAllRecipes)
+
 app.post("/users" , userController.signup)
 
 app.post("/users/login" , userController.login)
 
 app.post("/recipe" , userController.createRecipe)
+
+app.post("/users/follow" , userController.toFollowUser)

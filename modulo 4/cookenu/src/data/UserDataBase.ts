@@ -81,5 +81,47 @@ export class UserDataBase extends BaseDatabase {
         }
      }
 
+     public async insertFollower(userId: string,followedUserId: string) {
+        try {
+
+            await this.getConnection()
+            .insert({
+                userId,
+                followedUserId
+            }).into("Cookenu_folowers")
+            
+        } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message); 
+        }
+     }
+
+     public async findFollowedUsers(userId: string) {
+        try {
+
+            const following = await this.getConnection()
+            .select('*').from("Cookenu_folowers").where({
+                userId
+            })
+
+            return following
+            
+        } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message); 
+        }
+     }
+
+     public async pickAllRecipes() {
+        try {
+
+            const recipes = await this.getConnection()
+            .select('*').from("Cookenu_recipes")
+
+            return recipes
+            
+        } catch (error: any) {
+            throw new Error(error.sqlMessage || error.message); 
+        }
+     }
+
      
 }
