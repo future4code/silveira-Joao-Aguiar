@@ -193,5 +193,71 @@ export class UserController {
             res.status(res.statusCode).send(error.message)
         }
     }
+
+    public async toFollowUser(req: Request, res: Response){
+        try {
+            const followedUserId = req.body.id
+            const token = req.headers.auth
+
+            if(!token){
+                res.statusCode = 401
+                throw new Error("Acesso não autorizado, favor inserir um Token");
+            }
+            
+            const authenticator = new Authenticator()
+            const result = authenticator.getTokenData(String(token))
+
+            const userDataBase = new UserDataBase()
+            await userDataBase.insertFollower(result.id,followedUserId)
+
+            res.status(200).send("Followed successfully")
+
+        } catch (error: any) {
+            res.status(res.statusCode).send(error.message)
+        }         
+    }
+
+    public async getUserFollows(req: Request, res: Response){
+        try {
+            const token = req.headers.auth
+
+            if(!token){
+                res.statusCode = 401
+                throw new Error("Acesso não autorizado, favor inserir um Token");
+            }
+            
+            const authenticator = new Authenticator()
+            const result = authenticator.getTokenData(String(token))
+
+            const userDataBase = new UserDataBase()
+            const folowedUsers =  await userDataBase.findFollowedUsers(result.id)
+            console.log(folowedUsers)
+            res.status(200).send(folowedUsers)
+
+        } catch (error: any) {
+            res.status(res.statusCode).send(error.message)
+        }         
+    }
+
+    public async getAllRecipes(req: Request, res: Response){
+        try {
+            const token = req.headers.auth
+
+            if(!token){
+                res.statusCode = 401
+                throw new Error("Acesso não autorizado, favor inserir um Token");
+            }
+
+            const userDataBase = new UserDataBase()
+            const recipes =  await userDataBase.pickAllRecipes()
+            res.status(200).send(recipes)
+
+        } catch (error: any) {
+            res.status(res.statusCode).send(error.message)
+        }         
+    }
+
+
+    
  
 }
