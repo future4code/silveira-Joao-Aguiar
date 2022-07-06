@@ -36,7 +36,7 @@ export class UserController {
         try {
 
             const token = await new UserBusiness().login(input)
-            res.status(201).send({message: "usuário cadastrado com sucesso", token})
+            res.status(201).send({message: "Usuário encontrado", token})
 
         } catch (error: any) {
             res.status(400).send(error.message)

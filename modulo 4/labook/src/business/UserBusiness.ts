@@ -14,14 +14,12 @@ export class UserBusiness {
 
         if(!name || !email || !password){
             throw new Error("Campos inválidos");
-
         }
 
         //conferir se usuário existe
         const checkUser = await new UserDataBase().findUsserByEmail(email)
         if(checkUser){
             throw new Error("Usuáro já cadastrado");
-
         }
         //criar um id para o usuário
         const id = new IdGenerator().generate()
@@ -47,8 +45,29 @@ export class UserBusiness {
     public async login(input: loginInputDTO){
         
         //validação
+        const {email,password} = input
+
+        if(!email || !password){
+            throw new Error("Campos inválidos");         
+        }
+
         //encontrar usuário pelo email
-        //
+        const user = await new UserDataBase().findUsserByEmail(email)
+        if(!user){
+            throw new Error("Usuário não encontado");     
+        }
+        const hash = user.getUserInfo().password
+
+        //verificar se a senha está correta
+        const checkPassword = await new HashManager().comparePasswords(password,hash)
+        if(!checkPassword){
+            throw new Error("Senha incorreta");
+        }
+
+        //gerar token a partir do id
+        const id = user.getUserInfo().id
+        const token = new Authenticator().generateToken({id})
+        return token
 
     }
 }
