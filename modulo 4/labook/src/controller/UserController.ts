@@ -43,4 +43,38 @@ export class UserController {
         }
 
     }
+
+    public async follow(req: Request,res: Response){
+
+        const id = req.params.id
+        const token = String(req.headers.auth)
+
+        try {
+
+            await new UserBusiness().follow(id,token)
+            res.status(201).send("Amizade feita com sucesso")
+
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+
+    }
+
+    public async unfollow(req: Request,res: Response){
+
+        const id = req.params.id
+        const token = String(req.headers.auth)
+
+        try {
+
+            await new UserBusiness().unfollow(id,token)
+            res.status(201).send("Amizade desfeita com sucesso")
+
+        } catch (error: any) {
+            res.status(400).send(error.message)
+        }
+
+    }
+
+
 }
