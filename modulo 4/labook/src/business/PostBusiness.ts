@@ -1,6 +1,6 @@
 import { PostDataBase } from "../data/PostDataBase";
 import { PostModel } from "../model/PostModel";
-import { postInputDTO } from "../model/types/PostInputDTO";
+import { postInputDTO } from "../model/types/postInputDTO";
 import { Authenticator } from "../services/Authenticator";
 
 export class PostBusiness {
@@ -14,7 +14,8 @@ export class PostBusiness {
         const creatorId = new Authenticator().getTokenData(token)
 
         if(!image || !description || !type){
-            throw new Error("Campos inválidos");
+            throw new
+             Error("Campos inválidos");
         }
 
         //definir data de criação
@@ -31,6 +32,33 @@ export class PostBusiness {
         )
 
         //criar post no banco
-        await new PostDataBase().insertUser(post)
+        await new PostDataBase().insertPost(post)
+    }
+
+    public async getPost(postId: number, token: string) {
+        // validações
+        if(!postId){
+            throw new Error("Faltando uma id");
+        }
+
+        if(!token){
+            throw new Error("Não autorizado"); 
+        }
+
+        // pegar post no banco
+        const post = await new PostDataBase().getPostbyId(postId)
+        return post
+    }
+
+    public async getAllPosts(token: string) {
+        // validações
+        
+        if(!token){
+            throw new Error("Não autorizado"); 
+        }
+
+        // pegar post no banco
+        const posts = await new PostDataBase().getAllPosts()
+        return posts
     }
 }
