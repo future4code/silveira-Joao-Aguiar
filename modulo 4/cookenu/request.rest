@@ -1,0 +1,44 @@
+
+
+POST http://localhost:3003/users
+Content-Type: application/json
+
+{
+    "name": "João Marcos",
+    "email": "joaoM24@labenu.com",
+    "password": "1234567",
+    "role": "ADMIN"
+}
+
+###
+
+POST http://localhost:3003/users/login
+Content-Type: application/json
+
+{
+    "email": "ObraboDoBackend@labenu.com",
+    "password": "brabodemais"
+}
+
+###
+
+POST http://localhost:3003/recipe
+Content-Type: application/json
+
+{
+    "title": "agua na caneca",
+    "description": "pegue alguns cubos de gelo, coloque em uma caneca e deixe no forno pre aquecido a 180 graus por 5 min"
+}
+
+###
+
+POST http://localhost:3003/users/follow
+Content-Type: application/json
+
+{
+    "id": "649af1e5-1020-4b59-89ec-c540ffd1"
+}
+
+###
+
+GET http://localhost:3003/users/follow
