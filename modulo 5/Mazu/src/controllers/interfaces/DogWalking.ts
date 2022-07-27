@@ -6,7 +6,8 @@ export enum WalkTime {
 export enum WalkStatus {
     WALKING = "PASSEANDO",
     WAITING = "EM ESPERA",
-    FINISHED = "FINALIZADO"
+    FINISHED = "FINALIZADO",
+    CANCELED = "CANCELADO"
 }
 
 export interface DogWalking {
@@ -14,9 +15,9 @@ status: WalkStatus,
 walkDate: string,
 price: number,
 duration: WalkTime,
-latitude: number,
-longitude: number,
-pets: string[],
+latitude: string,
+longitude: string,
+pet: string,
 walkStart: string,
 walkEnd: string  
 }
