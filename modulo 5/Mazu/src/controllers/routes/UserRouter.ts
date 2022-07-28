@@ -1,7 +1,22 @@
 import express from "express"
+import { Authenticator } from "../../business/services/Authenticator"
+import { HashManager } from "../../business/services/HashManager"
+import { IdGenerator } from "../../business/services/IdGenerator"
+import { UserBusiness } from "../../business/UserBusiness"
+import { UserDataBase } from "../../data/UserDataBase"
+import { UserController } from "../UserController"
 
 export const userRoute = express.Router()
 
-userRoute.post("/signup")
+const userBusiness = new UserBusiness(
+    new Authenticator(),
+    new HashManager(),
+    new IdGenerator(),
+    new UserDataBase()
+)
 
-userRoute.post("/login")
+const userController = new UserController(userBusiness)
+
+userRoute.post("/signup", userController.signup)
+
+userRoute.post("/login", userController.login)
