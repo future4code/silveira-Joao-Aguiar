@@ -20,3 +20,5 @@ const userController = new UserController(userBusiness)
 userRoute.post("/signup", userController.signup)
 
 userRoute.post("/login", userController.login)
+
+userRoute.post("/signupPets", userController.signupPets)

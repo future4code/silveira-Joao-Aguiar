@@ -1,3 +1,6 @@
+import { AuthenticationData } from "../controllers/interfaces/Authenticator"
+import { LoginInterfaceDTO } from "../controllers/interfaces/LoginInterfaceDTO"
+import { PetInterfaceDTO } from "../controllers/interfaces/PetInterfaceDTO"
 import { SignUpInterfaceDTO } from "../controllers/interfaces/SignUpInterfaceDTO"
 import { BaseDatabase } from "./BaseDataBase"
 
@@ -21,19 +24,35 @@ export class UserDataBase extends BaseDatabase {
         }
     }
 
-    InsertUserPets = async()=>{
+    InsertUserPets = async(input: PetInterfaceDTO,petID: string,tokenData: AuthenticationData)=>{
         try {
-            
+            const {petName,breed,details} = input
+            await this.getConnection()
+            .insert({
+                petID,
+                userID: tokenData.id,
+                petName,
+                breed,
+                details
+            }).into("Dog_Walking_UserPets")
+
         } catch (error: any) {
-            
+            throw new Error(error.sqlMessage);  
         }
     }
 
-    getUserByEmail = async()=>{
+    getUserByEmail = async(email: string)=>{
         try {
-            
+
+            const user = await this.getConnection()
+            .select("*")
+            .from("Dog_Walking_Users")
+            .where({ email })
+
+            return user && user[0]
+
         } catch (error: any) {
-            
+            throw new Error(error.sqlMessage);  
         }
     }
 }

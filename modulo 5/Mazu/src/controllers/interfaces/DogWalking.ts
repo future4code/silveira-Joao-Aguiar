@@ -11,13 +11,8 @@ export enum WalkStatus {
 }
 
 export interface DogWalking {
-status: WalkStatus,
+petNames: string[],
 walkDate: string,
-price: number,
-duration: WalkTime,
-latitude: string,
-longitude: string,
-pet: string,
-walkStart: string,
-walkEnd: string  
+walkStart: string
+duration: WalkTime,  
 }
