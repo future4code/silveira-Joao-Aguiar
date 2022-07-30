@@ -14,6 +14,10 @@ const dogWalkingController = new DogWalkingController(dogWalkingBusiness)
 
 dogWalkingRoute.post("/create", dogWalkingController.createWalk)
 
-dogWalkingRoute.put("/startWalk")
+dogWalkingRoute.post("/startWalk", dogWalkingController.startWalk)
 
-dogWalkingRoute.put("/endWalk")
+dogWalkingRoute.post("/endWalk", dogWalkingController.endWalk)
+
+dogWalkingRoute.put("/updateLocation", dogWalkingController.updateLocation)
+
+dogWalkingRoute.get("/location", dogWalkingController.getLocation)

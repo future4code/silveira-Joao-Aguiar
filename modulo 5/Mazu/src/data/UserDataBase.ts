@@ -7,17 +7,20 @@ import { BaseDatabase } from "./BaseDataBase"
 
 export class UserDataBase extends BaseDatabase {
     insertUser = async (input: SignUpInterfaceDTO, id:string)=>{
-        const {name,email,password,role} = input
+        const {name,email,password,role,city,district,number} = input
         try {
 
-            await this.getConnection()
+            await BaseDatabase.connection("Dog_Walking_Users")
             .insert({
                 id,
                 name,
                 email,
+                city,
+                district,
+                number,
                 password,
                 role
-            }).into("Dog_Walking_Users")
+            })
 
         } catch (error: any) {
             throw new Error(error.sqlMessage);  
@@ -27,14 +30,14 @@ export class UserDataBase extends BaseDatabase {
     InsertUserPets = async(input: PetInterfaceDTO,petID: string,tokenData: AuthenticationData)=>{
         try {
             const {petName,breed,details} = input
-            await this.getConnection()
+            await BaseDatabase.connection("Dog_Walking_UserPets")
             .insert({
                 petID,
                 userID: tokenData.id,
                 petName,
                 breed,
                 details
-            }).into("Dog_Walking_UserPets")
+            })
 
         } catch (error: any) {
             throw new Error(error.sqlMessage);  
@@ -44,7 +47,7 @@ export class UserDataBase extends BaseDatabase {
     getUserByEmail = async(email: string)=>{
         try {
 
-            const user = await this.getConnection()
+            const user = await BaseDatabase.connection("Dog_Walking_Users")
             .select("*")
             .from("Dog_Walking_Users")
             .where({ email })

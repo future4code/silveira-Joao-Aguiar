@@ -12,11 +12,14 @@ export class UserController {
     
     signup = async (req: Request, res: Response)=> {
         try {
-        const {name,email,password,role} = req.body
+        const {name,email,password,role,city,district,number} = req.body
 
         const input: SignUpInterfaceDTO = {
             name,
             email,
+            city,
+            district,
+            number,
             password,
             role
         }

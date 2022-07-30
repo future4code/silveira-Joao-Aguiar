@@ -11,8 +11,8 @@ CREATE TABLE Dog_Walking (
     pets INT DEFAULT(1),
     latitude VARCHAR(255) DEFAULT(""),
     longitude VARCHAR(255) DEFAULT(""),
-    walkStart VARCHAR(255) NOT NULL,
-    walkEnd VARCHAR(255) NOT NULL
+    walkStart VARCHAR(255) DEFAULT(""),
+    walkEnd VARCHAR(255) DEFAULT("")
 );
 
 CREATE TABLE Dog_Walking_Users (

@@ -17,10 +17,10 @@ export class UserBusiness {
     ){}
 
     signup = async (input: SignUpInterfaceDTO)=>{
-        let {name,email,password,role} = input
+        let {name,email,password,role,city,district,number} = input
 
         // Validações
-        if(!name || !email || !password || !role ){
+        if(!name || !email || !password || !role || !city || !district || !number ){
             throw new CustomError(400,"Faltando informação");
         }
 
