@@ -1,11 +1,9 @@
-POST http://localhost:3003/user/signup
+POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
-    "name": "João",
-    "email": "joao@labenu.com",
-    "password": "123456",
-    "role": "ADMIN"
+    "email": "test@labenu.com",
+    "password": "123456"
 }
 
 ###

@@ -1,5 +1,6 @@
 import { AuthenticationData } from "../controllers/interfaces/Authenticator"
 import { DogWalking } from "../controllers/interfaces/DogWalking"
+import { LocationInterfaceDTO } from "../controllers/interfaces/LocationInterfaceDTO"
 import { DogWalkingDataBase } from "../data/DogWalkingDataBase"
 import { CustomError } from "./errors/CustomError"
 import { Authenticator } from "./services/Authenticator"
@@ -49,8 +50,54 @@ export class DogWalkingBusiness {
 
     }
 
-    updateLocation = async ()=>{
+    getWalks = async (token: string)=>{
 
+        if(!token){
+            throw new CustomError(401,"Acesso não autorizado");
+        }
+
+        const tokenData = await this.authenticator.getTokenData(token)
+
+        if(tokenData.role !== "ADMIN"){
+            throw new CustomError(401,"Acesso não autorizado");
+        }
+
+        const walks = await this.dogDataBase.getWalks()
+        
+        return walks
+    }
+
+    getUserWalks = async (token: string)=>{
+
+        if(!token){
+            throw new CustomError(401,"Acesso não autorizado");
+        }
+
+        const tokenData = await this.authenticator.getTokenData(token)
+
+        const walks = await this.dogDataBase.getUserWalks(tokenData.id)
+        
+        return walks
+    }
+
+    updateLocation = async (input: LocationInterfaceDTO, token: string)=>{
+        const {walkID,latitude,longitude} = input
+
+        if(!latitude || !longitude){
+            throw new CustomError(400,"faltando informações");
+        }
+
+        if(!token){
+            throw new CustomError(401,"Acesso não autorizado");
+        }
+
+        const tokenData = await this.authenticator.getTokenData(token)
+
+        if(tokenData.role !== "ADMIN"){
+            throw new CustomError(401,"Acesso não autorizado");
+        }
+
+        this.dogDataBase.updateLocation(input,walkID)
     }
 
     startWalk = async (token: string, walkID: number, time: string)=>{
