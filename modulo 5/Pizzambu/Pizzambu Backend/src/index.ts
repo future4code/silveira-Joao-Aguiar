@@ -1,6 +1,7 @@
 import { app } from "./app";
+import { pizzaRouter } from "./controller/routes/PizzaRoutes";
 
 
 
 
-app.use("/pizza")
+app.use("/pizza", pizzaRouter)

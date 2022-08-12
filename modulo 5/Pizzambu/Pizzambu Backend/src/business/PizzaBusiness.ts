@@ -1,4 +1,4 @@
-import { OrderItem, Pizza } from "../controller/interfaces/PizzaInterfaces"
+import { Order, OrderItem, Pizza } from "../controller/interfaces/PizzaInterfaces"
 import { PizzaDataBase } from "../data/PizzaDataBase"
 import { CustomError } from "./errors/CustomError";
 import { IdGenerator } from "./services/IdGenerator"
@@ -29,7 +29,8 @@ export class PizzaBusiness {
     }
 
     getMenu = async ()=>{
-
+        const menu = await this.pizzaDataBase.getMenu()
+        return menu
     }
 
     getOrderById = async (id: string)=>{
@@ -37,10 +38,13 @@ export class PizzaBusiness {
             throw new CustomError(400,"Faltando ID do Pedido");                  
         }
 
-        await this.pizzaDataBase.getOrderById(id)
+        const order = await this.pizzaDataBase.getOrderById(id)
+
+        return order
     }
 
     getAllOrders = async ()=>{
-
+        const orders = await this.pizzaDataBase.getAllOrders()
+        return orders
     }
 }

@@ -26,4 +26,4 @@ pizzaRouter.get("/pizzas", pizzaController.getMenu)
 pizzaRouter.get("/orders/:id", pizzaController.getOrderById)
 
 // Lista de todos os pedidos
-pizzaRouter.get("/orders/all", pizzaController.getAllOrders)
+pizzaRouter.get("/allOrders", pizzaController.getAllOrders)

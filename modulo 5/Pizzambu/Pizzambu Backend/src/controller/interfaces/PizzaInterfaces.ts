@@ -11,5 +11,5 @@ export interface OrderItem {
 }
 
 export interface Order {
-    item: OrderItem
+    itens: OrderItem[]
 }

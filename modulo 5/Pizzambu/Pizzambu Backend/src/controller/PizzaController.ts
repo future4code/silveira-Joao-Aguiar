@@ -41,6 +41,9 @@ export class PizzaController {
     getMenu = async (req: Request, res: Response)=>{
         try {
             
+            const menu = await this.pizzaBusiness.getMenu()
+            res.status(200).send({menu,message:"Menu retornado com sucesso"})
+
         } catch (error: any) {
             res.status(error.statusCode || 500).send(error.message) 
         }
@@ -50,8 +53,8 @@ export class PizzaController {
         try {
             const id = String(req.params.id)
 
-             await this.pizzaBusiness.getOrderById(id)
-            res.status(200).send("Pedido encontrado com sucesso")
+             const order = await this.pizzaBusiness.getOrderById(id)
+            res.status(200).send({order,message:"Pedido encontrado com sucesso"})
 
         } catch (error: any) {
             res.status(error.statusCode || 500).send(error.message) 
@@ -61,6 +64,9 @@ export class PizzaController {
     getAllOrders = async (req: Request, res: Response)=>{
         try {
             
+            const orders = await this.pizzaBusiness.getAllOrders()
+            res.status(200).send({orders,message:"Pedidos retornados com sucesso"})
+
         } catch (error: any) {
             res.status(error.statusCode || 500).send(error.message) 
         }
