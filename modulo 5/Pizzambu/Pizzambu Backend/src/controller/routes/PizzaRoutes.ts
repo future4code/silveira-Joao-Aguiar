@@ -20,7 +20,7 @@ pizzaRouter.post("/createOrder", pizzaController.createOrder)
 pizzaRouter.post("/createPizza", pizzaController.createPizza)
 
 // Menu de pizzas
-pizzaRouter.get("/pizzas", pizzaController.getMenu)
+pizzaRouter.get("/menu", pizzaController.getMenu)
 
 // Detalhes de um pedido individual
 pizzaRouter.get("/orders/:id", pizzaController.getOrderById)
